@@ -3,12 +3,6 @@
 ### Backend for social media app.
 > Uses Express & Mongoose
 
-<br />
-
-----
-
-<br />
-
 ## Getting Started
 
 Follow these steps to get this up and running on your local machine.
