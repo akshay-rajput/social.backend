@@ -59,8 +59,11 @@ router.param("postId", async (req, res, next, postId) => {
             })
         }
 
+        let fullPost = await post.populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ]).execPopulate();
+
         // set post inside req object to use below 
         req.post = post;
+        req.fullPost = fullPost;
         next();
     }
     catch(error){
@@ -76,11 +79,11 @@ router.param("postId", async (req, res, next, postId) => {
 router.route('/:postId')
 .get((req, res) => {
     // take post out of req object
-    let {post} = req
+    let {fullPost} = req
 
     res.json({
         success: true,
-        post: post
+        post: fullPost
     })
     
 })
@@ -96,10 +99,12 @@ router.route('/:postId')
     try{
         post = await post.save()
 
+        let fullPost = await post.populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ]).execPopulate();
+
         res.json({
             success: true,
             message: "Post updated successfully",
-            post
+            post: fullPost
         })
     }
     catch(error){
@@ -118,6 +123,7 @@ router.route('/:postId')
         res.json({
             success: true,
             deleted: true,
+            message: "Post deleted successfully!",
             post
         })
     }
