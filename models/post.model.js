@@ -20,7 +20,7 @@ require('mongoose-type-url');
 
 const postSchema = new Schema({
     id: Schema.Types.ObjectId,
-    userId: {
+    publisher: {
         type: Schema.Types.ObjectId, 
         ref: "User"
     },
