@@ -10,13 +10,15 @@ const requestLog = require("./middleware/requestLog");
 const pageNotFound = require("./middleware/pageNotFound");
 const errorHandler = require("./middleware/errorHandler");
 
-// const signupRouter = require("./router/signup");
-// const loginRouter = require("./router/login");
-// const videosRouter = require("./router/videos");
+const signupRouter = require("./router/signup");
+const loginRouter = require("./router/login");
+const postsRouter = require("./router/posts");
+const followRouter = require("./router/follow");
 // const playlistsRouter = require("./router/playlists");
-// const usersRouter = require("./router/users");
-// const searchRouter = require("./router/search");
-
+const usersRouter = require("./router/users");
+const searchRouter = require("./router/search");
+const feedRouter = require("./router/feed");
+const notificationRouter = require('./router/notification');
 const port = 4000;
 
 // to parse json from req.body
@@ -32,11 +34,14 @@ let allowedOrigins = [
 app.use(function (req, res, next) {
     var origin = req.headers.origin;
     console.log('origin: ', origin)
-    if (allowedOrigins.indexOf(origin) > -1) {
-        res.setHeader("Access-Control-Allow-Origin", origin);
-    } else {
-        console.log("trying to access from other origin.");
-        return res.status(400).json({ message: "Origin not allowed" });
+    
+    if(origin){
+        if (allowedOrigins.indexOf(origin) > -1) {
+            res.setHeader("Access-Control-Allow-Origin", origin);
+        } else {
+            console.log("trying to access from other origin.");
+            return res.status(400).json({ message: "Origin not allowed" });
+        }
     }
 
     res.header(
@@ -84,12 +89,16 @@ function authVerify(req, res, next) {
 }
 
 // route handlers
-// app.use('/signup', signupRouter)
-// app.use('/login', loginRouter)
-// app.use('/videos', videosRouter)
+app.use('/signup', signupRouter);
+app.use('/login', loginRouter);
+app.use('/posts', postsRouter);
+app.use('/follow', followRouter);
+app.use('/users', usersRouter);
+app.use('/search', searchRouter);
+app.use('/feed', feedRouter);
+app.use('/notification', notificationRouter);
+
 // app.use('/playlists', authVerify, playlistsRouter)
-// app.use('/users', authVerify, usersRouter)
-// app.use('/search', searchRouter)
 
 app.get("/", (req, res) => {
     res.send("API page for Kvell");
