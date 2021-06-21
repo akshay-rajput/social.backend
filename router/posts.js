@@ -81,7 +81,7 @@ router.route('/:postId')
     // take post out of req object
     let {fullPost} = req
 
-    res.json({
+    res.status(200).json({
         success: true,
         post: fullPost
     })
@@ -101,14 +101,14 @@ router.route('/:postId')
 
         let fullPost = await post.populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ]).execPopulate();
 
-        res.json({
+        res.status(200).json({
             success: true,
             message: "Post updated successfully",
             post: fullPost
         })
     }
     catch(error){
-        res.json({
+        res.status(400).json({
             success: false,
             error: error.message,
             message: "Error while saving post"
@@ -120,7 +120,7 @@ router.route('/:postId')
     
     try{
         await post.remove()
-        res.json({
+        res.status(200).json({
             success: true,
             deleted: true,
             message: "Post deleted successfully!",
@@ -128,7 +128,7 @@ router.route('/:postId')
         })
     }
     catch(error){
-        res.json({
+        res.status(400).json({
             success: false,
             error: error.message,
             message: "Error while deleting post"
