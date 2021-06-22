@@ -100,8 +100,8 @@ router.route('/:userId')
         console.log("error updating user: ", error)
         res.json({
             success: false,
-            message: error.message,
-            error
+            message: "Error updating user information",
+            error: error.message
         })
     }
 })
