@@ -3,7 +3,7 @@ const { User } = require('../models/user.model');
 const { Post } = require('../models/post.model');
 let router = express.Router();
 
-// users route
+// search route
 router.route('/')
 .get(async function(req, res){
     try{
@@ -12,39 +12,9 @@ router.route('/')
         let postsFound = [];
         let usersFound = [];
 
-        // find users & posts with that query
-        // await User.find({"username": { "$regex": searchString, "$options": "i" }})
-        //     .limit(5)
-        //     .exec( function(err, docs) { 
-        //         if(err){
-        //             console.log('Error finding users > ', err);
-        //         }
-        //         else{
-        //             console.log('users: ', docs);
-
-        //             if(docs.length > 0){
-        //                 usersFound = docs;
-        //             }
-        //         }             
-        // });
-        
         usersFound = await User.find({"username": { "$regex": searchString, "$options": "i" }}).limit(5);
 
         postsFound = await Post.find({$text: {$search: searchString}}).limit(5);
-        // await Post.find({$text: {$search: searchString}})
-        //     .limit(5)
-        //     .exec(await function(err, docs) { 
-        //         if(err){
-        //             console.log('Error finding posts > ', err);
-        //         }
-        //         else{
-        //             console.log('posts: ', docs.length);
-
-        //             if(docs.length > 0){
-        //                 postsFound = docs;
-        //             }
-        //         } 
-        // });
 
         if(usersFound?.length > 0 || postsFound?.length > 0){
             res.status(200).json({
