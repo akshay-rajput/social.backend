@@ -14,6 +14,9 @@ const followSchema = new Schema({
     required: "Need id of user to be followed"
   }
 
+},
+{
+    timestamps: true,
 });
 
 const Follow = mongoose.model("Follow", followSchema);
