@@ -4,7 +4,6 @@ const { Notification } = require('../models/notification.model');
 const {extend} = require('lodash');
 let router = express.Router();
 
-// users route
 router.route('/')
 .get(async function(req, res){
     let userId = req.headers.userid;
@@ -85,7 +84,6 @@ router.route('/')
     }
 })
 
-// update single notification
 router.route('/:notificationId')
 .post(async (req, res) => {
     let notificationData = req.body;
