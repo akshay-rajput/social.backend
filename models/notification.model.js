@@ -1,6 +1,19 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+/** 
+ * {    
+ *      <br>&nbsp;&nbsp; id: ObjectId, 
+ *      <br>&nbsp;&nbsp; postId: ObjectId, ref-Post,
+ *      <br>&nbsp;&nbsp; notificationType: like or comment,
+ *      <br>&nbsp;&nbsp; markAsRead: true or false,
+ *      <br>&nbsp;&nbsp; notificationTo: userId, ref - User, 
+ *      <br>&nbsp;&nbsp; notificationFrom: userId, ref - User,
+ *      <br>&nbsp;&nbsp; createdAt: date,
+ *      <br>&nbsp;&nbsp; updatedAt: date
+ * <br>
+ * }
+*/
 const notificationSchema = new Schema({
   postId: {
     type: Schema.Types.ObjectId,
@@ -22,6 +35,9 @@ const notificationSchema = new Schema({
     ref: "User",
     required: "Need id of user that is sending notification"
   }
+},
+{
+    timestamps: true,
 });
 
 const Notification = mongoose.model("Notification", notificationSchema);
