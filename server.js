@@ -91,14 +91,12 @@ function authVerify(req, res, next) {
 // route handlers
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
-app.use('/posts', postsRouter);
-app.use('/follow', followRouter);
-app.use('/users', usersRouter);
-app.use('/search', searchRouter);
-app.use('/feed', feedRouter);
-app.use('/notification', notificationRouter);
-
-// app.use('/playlists', authVerify, playlistsRouter)
+app.use('/posts', authVerify, postsRouter);
+app.use('/follow', authVerify, followRouter);
+app.use('/users', authVerify, usersRouter);
+app.use('/search', authVerify, searchRouter);
+app.use('/feed', authVerify, feedRouter);
+app.use('/notification', authVerify, notificationRouter);
 
 app.get("/", (req, res) => {
     res.send("API page for Kvell");
