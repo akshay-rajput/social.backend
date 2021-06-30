@@ -14,7 +14,7 @@ router.route('/')
 
         usersFound = await User.find({"username": { "$regex": searchString, "$options": "i" }}).limit(5);
 
-        postsFound = await Post.find({$text: {$search: searchString}}).limit(5);
+        postsFound = await Post.find({$text: {$search: searchString}}).limit(5).populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ]);
 
         if(usersFound?.length > 0 || postsFound?.length > 0){
             res.status(200).json({
