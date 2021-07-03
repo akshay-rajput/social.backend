@@ -29,7 +29,28 @@ router.route('/')
             })
         }else{
             let password = user.password
+
+            // add default links
+            let defaultLinks = [
+                {
+                    linkType: "Facebook", url: ""
+                },
+                {
+                    linkType: "Instagram", url: ""
+                },
+                {
+                    linkType: "LinkedIn", url: ""
+                },
+                {
+                    linkType: "Twitter", url: ""
+                },
+                {
+                    linkType: "Other", url: ""
+                },
+            ]
             
+            user.links = defaultLinks;
+
             // generate hash
             const salt = await bcrypt.genSalt(10);
             user.password = await bcrypt.hash(password, salt);
