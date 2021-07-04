@@ -14,7 +14,7 @@ const signupRouter = require("./router/signup");
 const loginRouter = require("./router/login");
 const postsRouter = require("./router/posts");
 const followRouter = require("./router/follow");
-// const playlistsRouter = require("./router/playlists");
+const fileUploadRouter = require("./router/fileUpload");
 const usersRouter = require("./router/users");
 const searchRouter = require("./router/search");
 const feedRouter = require("./router/feed");
@@ -91,6 +91,7 @@ function authVerify(req, res, next) {
 // route handlers
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
+app.use('/fileUpload', fileUploadRouter);
 app.use('/posts', authVerify, postsRouter);
 app.use('/follow', authVerify, followRouter);
 app.use('/users', authVerify, usersRouter);
