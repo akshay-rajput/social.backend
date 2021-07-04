@@ -13,7 +13,7 @@ router.post("/", upload.single("image"), async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'File uploaded successfully',
-            imageUrl: result
+            imageUrl: result.secure_url
         })
     } catch (err) {
         console.log(err);
