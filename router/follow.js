@@ -94,7 +94,7 @@ router.route('/:followUserId')
 
 })
 .delete(async (req, res) => {
-    let userid = req.headers.userid;
+    let userId = req.headers.userid;
     let followUserId = req.params.followUserId;
 
     if(userId && followUserId){
