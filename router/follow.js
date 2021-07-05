@@ -33,7 +33,6 @@ router.route('/')
         res.status(404).json({
             success: false, 
             message: "Need user id to find follower data",
-            error: err.message
         })
     }
 })
@@ -87,7 +86,6 @@ router.route('/:followUserId')
         res.status(404).json({
             success: false, 
             message: "Need user id to set follower data",
-            error: err.message
         })
     }
 
