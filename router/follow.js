@@ -64,14 +64,17 @@ router.route('/:followUserId')
             console.log('followed: ', followData);
 
             // get updated data
-            let followingList = await Follow.find({userId: userId}).populate([{path: 'follows', model: "User", select:["_id","name","username", "avatarUrl"]} ]);
-            let followerList = await Follow.find({follows: userId}).populate([{path: 'userId', model: "User", select:["_id","name","username", "avatarUrl"]} ]);
+            let followingList = await Follow.find({userId: followUserId}).populate([{path: 'follows', model: "User", select:["_id","name","username", "avatarUrl"]} ]);
+            let followerList = await Follow.find({follows: followUserId}).populate([{path: 'userId', model: "User", select:["_id","name","username", "avatarUrl"]} ]);
+        
+            let userFollowingList = await Follow.find({userId: userId}).populate([{path: 'follows', model: "User", select:["_id","name","username", "avatarUrl"]} ]);
         
             res.status(200).json({
                 success: true, 
                 message: 'Followed successfully',
                 followers: followerList,
-                following: followingList
+                following: followingList,
+                userFollowingList: userFollowingList
             })
         }
         catch(err){
