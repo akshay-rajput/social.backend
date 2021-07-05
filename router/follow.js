@@ -99,7 +99,7 @@ router.route('/:followUserId')
 
     if(userId && followUserId){
         try{
-            await Follow.deleteOne({userId: userid, follows: followUserId});
+            await Follow.deleteOne({userId: userId, follows: followUserId});
             
             // await followEntry.remove();
             res.json({
