@@ -22,7 +22,8 @@ router.route('/')
             
             let promisesOfFollowingPosts = followList.map(async (following) => {
                 try{
-                    let followingPosts = await Post.find({publisher: following})
+                    console.log('following publisher: ', userId);
+                    let followingPosts = await Post.find({$or: [{publisher: following},{publisher: userId}]})
                                         .populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ])
                                         .sort({createdAt: -1});
                 
@@ -43,24 +44,6 @@ router.route('/')
             })
 
             await Promise.all(promisesOfFollowingPosts);
-
-            // all followed users
-            // const cursor = await Follow.find({ userId: userId }).cursor();
-
-            // // for each followed user
-            // for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-                
-            //     // find posts of the user that is followed
-            //     // let followPosts = await Post.find({publisher: doc.follows})
-            //     //                         .populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ])
-            //     //                         .sort({createdAt: -1});
-                
-            //     // console.log('followedPost: ', followPosts);
-            //     userFeedPosts.push(
-            //         
-            //     );
-            //     // userFeedPosts.push(followPosts);
-            // }
 
             console.log('userFeed: ', userFeedPosts);
 
