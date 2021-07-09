@@ -7,7 +7,7 @@ let router = express.Router();
 router.route('/')
 .get(async function(req, res){
     try{
-        const allPosts = await Post.find({})
+        const allPosts = await Post.find({}).populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ]);
 
         res.status(200).json({
             success: true,
