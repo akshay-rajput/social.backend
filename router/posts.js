@@ -9,6 +9,9 @@ router.route('/')
     try{
         const allPosts = await Post.find({}).populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ]);
 
+        // sort by date
+        allPosts.sort((post, nextPost) => nextPost.createdAt - post.createdAt);
+        
         res.status(200).json({
             success: true,
             posts: allPosts
