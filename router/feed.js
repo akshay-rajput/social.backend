@@ -80,6 +80,8 @@ router.route('/')
             // const profilePosts = await Post.find({userId: userId})
             const profilePosts = await Post.find({publisher: userId}).populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ]);
     
+			profilePosts.sort((post, nextPost) => nextPost.createdAt - post.createdAt);
+			
             res.status(200).json({
                 success: true,
                 posts: profilePosts
