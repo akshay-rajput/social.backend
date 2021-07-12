@@ -23,7 +23,7 @@ router.route('/')
             let promisesOfFollowingPosts = followList.map(async (following) => {
                 try{
                     console.log('following publisher: ', userId);
-                    let followingPosts = await Post.find({$or: [{publisher: following},{publisher: userId}]})
+                    let followingPosts = await Post.find({publisher: following})
                                         .populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ])
                                         .sort({createdAt: -1});
                 
@@ -31,6 +31,7 @@ router.route('/')
                     if(followingPosts.length > 0){
                         userFeedPosts.push(followingPosts);
                     }
+
                 }
                 catch(err){
                     console.log('error while getting follow posts - ', err.message);
@@ -44,9 +45,20 @@ router.route('/')
             })
 
             await Promise.all(promisesOfFollowingPosts);
+            
+            // add user's posts to feed
+            let userOwnPosts = await Post.find({publisher: userId})
+            .populate([{path: 'publisher likes.likedByUser comments.commentByUser', model: "User", select:["_id","name","username", "avatarUrl"]} ])
+            .sort({createdAt: -1});
 
-            console.log('userFeed: ', userFeedPosts);
+            if(userOwnPosts?.length > 0){
+                userFeedPosts.push(userOwnPosts)   
+            }
 
+            userFeedPosts = userFeedPosts.flat(2);
+            
+            userFeedPosts.sort((post, nextPost) => nextPost.createdAt - post.createdAt);
+            
             res.status(200).json({
                 success: true,
                 message: "Fetched user feed",
