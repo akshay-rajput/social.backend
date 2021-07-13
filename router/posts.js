@@ -91,8 +91,10 @@ router.route('/:postId')
     
 })
 .post(async (req, res) => {
+    // version causing problems with update
+    delete req.body.__v;
     // the post date passed by client
-    const postUpdate = req.body
+	const postUpdate = req.body
 
     // the post which was found by id
     let {post} = req
