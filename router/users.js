@@ -1,5 +1,6 @@
 let express = require('express');
 const { User } = require('../models/user.model');
+const { Post } = require('../models/post.model');
 const {extend} = require('lodash')
 let router = express.Router();
 
@@ -29,6 +30,51 @@ router.route('/')
 
 })
 
+// top users
+router.route('/top')
+.get(async function(req, res){
+    try{
+        const allPosts = await Post.find({}).populate([{path: 'publisher', model: "User", select:["_id","name","username", "avatarUrl"]} ]);
+
+        let groupedPosts = allPosts.reduce(
+            // reducer function and empty object as initial
+            (result, post) => {
+                // add existing posts to group property and append current post
+                result[post.publisher.name] = [...result[post.publisher.name] || [], post];
+                return result;
+            }, {}
+        );
+
+        let topUserData = [];
+        for (const userName in groupedPosts) {
+            if (Object.hasOwnProperty.call(groupedPosts, userName)) {
+                const userPosts = groupedPosts[userName];
+                let userData = {
+                    totalPosts: userPosts.length,
+                    userInfo: userPosts[0].publisher
+                }
+                topUserData.push(userData);
+            }
+        }
+
+        topUserData.sort((user, nextUser) => nextUser.totalPosts - user.totalPosts);
+
+        let topThreeUsers = topUserData.slice(0,3);
+
+        res.status(200).json({
+            success: true,
+            topUsers: topThreeUsers,
+        })
+        
+    }catch(error){
+        res.status(400).json({
+            success: false,
+            error: error.message,
+            message: 'Cannot get top users'
+        })
+    }
+})
+
 // middleware for RUD ops for single user
 router.param("userId", async (req, res, next, userId) => {
     try{
@@ -52,7 +98,6 @@ router.param("userId", async (req, res, next, userId) => {
         })
     }
 })
-
 
 // single user
 router.route('/:userId')
@@ -124,6 +169,8 @@ router.route('/:userId')
             error
         })
     }
-})
+});
+
+
 
 module.exports = router;
