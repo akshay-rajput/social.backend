@@ -8,6 +8,9 @@
 Follow these steps to get this up and running on your local machine.
 
 1. Clone or download this Repo
+```
+gh repo clone akshay-rajput/social.backend
+```
 
 2. Install packages
 ```js
